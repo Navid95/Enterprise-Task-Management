@@ -14,3 +14,8 @@ class UserNotFoundAuthError(BaseAuthError):
     _DEFAULT_MESSAGE_ = "Authenticated user not found"
     _DEFAULT_STATUS_CODE_ = 401
 
+
+class UnauthorizedAccessAuthError(BaseAuthError):
+    _DEFAULT_MESSAGE_ = "Forbidden, insufficient permissions"
+    _DEFAULT_STATUS_CODE_ = 403
+

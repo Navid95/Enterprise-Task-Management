@@ -1,6 +1,6 @@
 from functools import wraps
-from src.app.auth.users import User
-from src.app.auth.exceptions import UserNotFoundAuthError
+from src.app.auth.users import User, Role
+from src.app.auth.exceptions import UserNotFoundAuthError, UnauthorizedAccessAuthError
 
 
 def login_required(func):
@@ -8,7 +8,11 @@ def login_required(func):
     def check_user(*args, user: User = None, **kwargs):
         if not user:
             raise UserNotFoundAuthError
-        # TODO: Check user credentials/session
         return func(*args, user=user, **kwargs)
 
     return check_user
+
+
+def has_role(role: Role, user: User):
+    if not (role and user) or (role not in user.roles):
+        raise UnauthorizedAccessAuthError
