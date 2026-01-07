@@ -1,7 +1,7 @@
 import pytest
-from src.app.auth.users import User, Role
-from src.app.auth.exceptions import UserNotFoundAuthError, UnauthorizedAccessAuthError
-from src.app.auth.utilities import login_required, has_role
+from src.app.domain.auth import User, Role
+from src.app.domain.auth import UserNotFoundAuthError, UnauthorizedAccessAuthError
+from src.app.domain.auth import login_required, has_role
 
 
 @login_required

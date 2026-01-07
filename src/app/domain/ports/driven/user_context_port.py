@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.app.auth.users import User
+from src.app.domain.auth.users import User
 
 
 class UserContextPort(ABC):

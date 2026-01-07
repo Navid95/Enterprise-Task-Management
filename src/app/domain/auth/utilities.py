@@ -1,6 +1,6 @@
 from functools import wraps
-from src.app.auth.users import User, Role
-from src.app.auth.exceptions import UserNotFoundAuthError, UnauthorizedAccessAuthError
+from src.app.domain.auth.users import User, Role
+from src.app.domain.auth.exceptions import UserNotFoundAuthError, UnauthorizedAccessAuthError
 
 
 def login_required(func):
