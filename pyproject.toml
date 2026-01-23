@@ -11,7 +11,8 @@ dependencies = [
     "pydantic (>=2.12.3,<3.0.0)",
     "pytest (>=8.4.2,<9.0.0)",
     "fastapi (>=0.121.1,<0.122.0)",
-    "setuptools (>=80.9.0,<81.0.0)"
+    "setuptools (>=80.9.0,<81.0.0)",
+    "email-validator (>=2.3.0,<3.0.0)"
 ]
 
 

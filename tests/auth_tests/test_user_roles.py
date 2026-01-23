@@ -1,7 +1,14 @@
 import pytest
-from src.app.domain.auth.users import User, Role
-from src.app.domain.auth.exceptions import UserNotFoundAuthError, UnauthorizedAccessAuthError
-from src.app.domain.auth.utilities import login_required, has_role
+from src.app.domain.user_management.users import User, Role
+from src.app.domain.user_management.value_objects.user_info import (
+    UserEmail,
+    UserMobileNumber,
+)
+from src.app.domain.user_management.exceptions import (
+    UserNotFoundAuthError,
+    UnauthorizedAccessAuthError,
+)
+from src.app.domain.user_management.utilities import login_required, has_role
 
 
 @login_required
@@ -13,7 +20,12 @@ def say_hi(*args, **kwargs):
 
 
 def test_login_required_success():
-    u1 = User(mobile_num="1234567890", hashed_password="1234567890", roles=[])
+    u1 = User(
+        mobile_num=UserMobileNumber(mobile="1234567890"),
+        hashed_password="1234567890",
+        roles=[],
+        email=UserEmail(email="u1@example.com"),
+    )
     say_hi(0, 1, 2, 3, user=u1, custom="custom")
 
 
@@ -30,14 +42,24 @@ def test_login_required_none_user_exception():
 
 
 def test_has_role_success():
-    u1: User = User(mobile_num="1234567890", hashed_password="1234567890", roles=[])
+    u1 = User(
+        mobile_num=UserMobileNumber(mobile="1234567890"),
+        hashed_password="1234567890",
+        roles=[],
+        email=UserEmail(email="u1@example.com"),
+    )
     r1: Role = Role(name="admin")
     u1.roles.append(r1)
     has_role(r1, u1)
 
 
 def test_has_role_un_authorized_exception_wrong_role():
-    u1: User = User(mobile_num="1234567890", hashed_password="1234567890", roles=[])
+    u1 = User(
+        mobile_num=UserMobileNumber(mobile="1234567890"),
+        hashed_password="1234567890",
+        roles=[],
+        email=UserEmail(email="u1@example.com"),
+    )
     r1: Role = Role(name="admin")
     r2: Role = Role(name="user")
     u1.roles.append(r1)
@@ -47,7 +69,12 @@ def test_has_role_un_authorized_exception_wrong_role():
 
 
 def test_has_role_un_authorized_exception_no_role():
-    u1: User = User(mobile_num="1234567890", hashed_password="1234567890", roles=[])
+    u1 = User(
+        mobile_num=UserMobileNumber(mobile="1234567890"),
+        hashed_password="1234567890",
+        roles=[],
+        email=UserEmail(email="u1@example.com"),
+    )
     r1: Role = Role(name="admin")
     with pytest.raises(Exception) as err:
         has_role(r1, u1)

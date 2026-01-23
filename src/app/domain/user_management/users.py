@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from uuid import UUID, uuid4
 from datetime import datetime
+from src.app.domain.user_management.value_objects.user_info import UserEmail, UserMobileNumber
 
 
 class Base(BaseModel):
@@ -11,7 +12,8 @@ class Base(BaseModel):
 
 
 class User(Base):
-    mobile_num: str = Field(min_length=10, max_length=13)
+    mobile_num: UserMobileNumber
+    email_address: UserEmail = Field(default=None)
     hashed_password: str = Field()
     roles: list['Role'] = Field()
 
