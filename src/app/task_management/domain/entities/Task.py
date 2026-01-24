@@ -1,8 +1,8 @@
 from pydantic import Field, model_validator
 from datetime import datetime, timedelta
 from uuid import UUID
-from src.app.domain.Entities.base import Base
-from src.app.domain.Entities.task_exceptions import InvalidStartEndDateRange
+from src.app.task_management.domain.entities.base import Base
+from src.app.task_management.domain.entities.task_exceptions import InvalidStartEndDateRange
 
 _DEFAULT_TASK_DURATION_MINUTES_ = 1 * 24 * 60
 

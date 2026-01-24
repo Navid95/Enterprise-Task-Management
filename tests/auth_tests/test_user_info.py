@@ -1,5 +1,5 @@
 import pytest
-from src.app.domain.user_management.domain.value_objects.user_info import UserEmail
+from src.app.user_management.domain.value_objects.user_info import UserEmail
 
 
 def test_equality():
