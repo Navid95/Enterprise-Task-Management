@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.app.domain.user_management.entities.users import User
+from src.app.domain.user_management.domain.entities import User
 
 
 class UserContextPort(ABC):

@@ -1,12 +1,12 @@
 from pydantic import BaseModel, Field
-from src.app.domain.user_management.value_objects.user_info import (
+from src.app.domain.user_management.domain.value_objects.user_info import (
     UserEmail,
     UserMobileNumber,
     UserId,
     HashedPassword,
 )
-from src.app.domain.user_management.value_objects.team import TeamId
-from src.app.domain.user_management.exceptions import (
+from src.app.domain.user_management.domain.value_objects.team import TeamId
+from src.app.domain.user_management.domain.exceptions import (
     NotTeamManagerError,
     MemberAlreadyInTeamError,
     MemberNotInTeamError,
