@@ -28,19 +28,19 @@ class Team(BaseModel):
 
     def __check_manager_id__(self, manager_id):
         if not manager_id == self.manager_id:
-            raise NotTeamManagerError()
+            raise NotTeamManagerError(manager_id=manager_id, team_id=self.id)
 
     def add_member(self, manager_id: UserId, new_member_id: UserId):
         self.__check_manager_id__(manager_id)
         if new_member_id in self.members:
-            raise MemberAlreadyInTeamError()
+            raise MemberAlreadyInTeamError(member_id=new_member_id, team_id=self.id)
         self.members.add(new_member_id)
 
     def remove_member(self, manager_id: UserId, member_id: UserId):
         self.__check_manager_id__(manager_id)
         if member_id not in self.members:
-            raise MemberNotInTeamError()
+            raise MemberNotInTeamError(member_id=member_id, team_id=self.id)
         try:
             self.members.remove(member_id)
         except KeyError as e:
-            raise MemberNotInTeamError()
+            raise MemberNotInTeamError(member_id=member_id, team_id=self.id)
