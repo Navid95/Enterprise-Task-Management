@@ -9,6 +9,7 @@ from src.app.user_management.domain.value_objects.user_info import (
 from src.app.user_management.application.use_cases.create_user_use_case import (
     CreateUserUseCase,
 )
+from src.app.user_management.domain.exceptions import DuplicateUserInformation
 from tests.user_management.adapters.driven.fake_user_repo import FakeUserRepoInMemory
 
 _DEFAULT_USER_EMAIL = UserEmail(email="default@company.com")
@@ -47,10 +48,11 @@ def test_duplicate_user_mobile(create_user_use_case):
     mobile = _DEFAULT_USER_MOBILE
     hashed_passwd = HashedPassword(hashed_password="#!!$$#hsdvafb")
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(DuplicateUserInformation) as e:
         user = create_user_use_case.execute(
             user_email=email, user_mobile_number=mobile, hashed_password=hashed_passwd
         )
+        assert e.context.get("user_mobile") == mobile
 
 
 def test_duplicate_user_email(create_user_use_case):
@@ -58,7 +60,8 @@ def test_duplicate_user_email(create_user_use_case):
     mobile = UserMobileNumber(mobile="0000000000")
     hashed_passwd = HashedPassword(hashed_password="#!!$$#hsdvafb")
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(DuplicateUserInformation) as e:
         user = create_user_use_case.execute(
             user_email=email, user_mobile_number=mobile, hashed_password=hashed_passwd
         )
+        assert e.context.get("user_email") == email

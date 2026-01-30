@@ -5,6 +5,7 @@ from src.app.user_management.domain.value_objects.user_info import (
     UserMobileNumber,
     HashedPassword,
 )
+from src.app.user_management.domain.exceptions import UserNotFound, DuplicateUserInformation
 from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 
 
@@ -19,12 +20,11 @@ class CreateUserUseCase:
         user_email: UserEmail,
         hashed_password: HashedPassword,
     ) -> User:
-        existing_mobile = self._user_repo.get_by_mobile(user_mobile_number)
-        if existing_mobile:
-            raise Exception()
-        existing_email = self._user_repo.get_by_email(user_email)
-        if existing_email:
-            raise Exception()
+        if self._user_repo.exists_by_mobile(user_mobile_number):
+            raise DuplicateUserInformation(user_mobile=user_mobile_number)
+        if self._user_repo.exists_by_email(user_email):
+            raise DuplicateUserInformation(user_email=user_email)
+
         user = User(
             id=UserId(),
             mobile_num=user_mobile_number,
@@ -33,5 +33,4 @@ class CreateUserUseCase:
         )
 
         self._user_repo.save(user)
-
         return user
