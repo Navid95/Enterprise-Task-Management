@@ -8,3 +8,6 @@ class Container:
         self.user_repo = FakeUserRepoInMemory()
         self.create_user_uc = CreateUserUseCase(self.user_repo)
         self.user_application_service = UserApplicationService(self.create_user_uc)
+
+    def get_user_application_service(self):
+        return self.user_application_service
