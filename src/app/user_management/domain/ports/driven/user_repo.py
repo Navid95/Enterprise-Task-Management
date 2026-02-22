@@ -5,13 +5,12 @@ from src.app.user_management.domain.value_objects.user_info import (
     UserEmail,
     UserMobileNumber,
 )
-from src.app.user_management.domain.exceptions import UserNotFound, DuplicateUserInformation
 
 
 class UserRepository(ABC):
 
     @abstractmethod
-    def get_by_id(self, user_id: UserId) -> User:
+    async def get_by_id(self, user_id: UserId) -> User:
         """
         Command Query
         Retrieve a user by its id.
@@ -22,7 +21,7 @@ class UserRepository(ABC):
         ...
 
     @abstractmethod
-    def save(self, user: User):
+    async def save(self, user: User):
         """
         Command Query
         Persist a user instance
@@ -34,7 +33,7 @@ class UserRepository(ABC):
         ...
 
     @abstractmethod
-    def get_by_mobile(self, mobile: UserMobileNumber) -> User:
+    async def get_by_mobile(self, mobile: UserMobileNumber) -> User:
         """
         Command Query
         Retrieve a user by its mobile number
@@ -45,7 +44,7 @@ class UserRepository(ABC):
         ...
 
     @abstractmethod
-    def get_by_email(self, email: UserEmail) -> User:
+    async def get_by_email(self, email: UserEmail) -> User:
         """
         Command Query
         Retrieve a user by its email address
@@ -56,7 +55,7 @@ class UserRepository(ABC):
         ...
 
     @abstractmethod
-    def exists_by_email(self, email: UserEmail) -> bool:
+    async def exists_by_email(self, email: UserEmail) -> bool:
         """
         Check if a user with the given email address exists
         :param email: the email address of the user
@@ -64,10 +63,9 @@ class UserRepository(ABC):
         """
 
     @abstractmethod
-    def exists_by_mobile(self, mobile: UserMobileNumber) -> bool:
+    async def exists_by_mobile(self, mobile: UserMobileNumber) -> bool:
         """
         Check if a user with the given mobil3 number exists
         :param mobile: the mobile number of the user
         :return: True if a user with the given mobile number exists
         """
-

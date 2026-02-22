@@ -1,5 +1,5 @@
 import pytest
-
+import pytest_asyncio
 from src.app.user_management.domain.entities.users import User
 from src.app.user_management.domain.value_objects.user_info import (
     UserEmail,
@@ -26,9 +26,9 @@ def create_user_uc(container):
     yield container.create_user_uc
 
 
-@pytest.fixture()
-def create_user_seeded_uc(container):
-    container.user_repo.save(
+@pytest_asyncio.fixture()
+async def create_user_seeded_uc(container):
+    await container.user_repo.save(
         User(
             id=UserId(),
             mobile_num=_DEFAULT_USER_MOBILE,
