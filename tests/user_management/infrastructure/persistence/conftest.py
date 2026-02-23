@@ -9,7 +9,7 @@ from src.app.user_management.domain.value_objects.user_info import (
     HashedPassword,
     UserId,
 )
-from src.app.user_management.infrastructure.persistence.base import BaseModel
+from src.app.infrastructure.persistence.base import BaseModel
 from src.app.user_management.infrastructure.persistence.models import UserModel
 
 

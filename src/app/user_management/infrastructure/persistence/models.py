@@ -1,6 +1,6 @@
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import Mapped
-from src.app.user_management.infrastructure.persistence.base import BaseModel
+from src.app.infrastructure.persistence.base import BaseModel
 from src.app.user_management.domain.entities.users import User
 from src.app.user_management.domain.value_objects.user_info import (
     UserId,
