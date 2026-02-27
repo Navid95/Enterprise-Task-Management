@@ -13,18 +13,16 @@ from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 
 class CreateUserUseCase:
 
-    def __init__(self, user_repo: UserRepository):
-        self._user_repo = user_repo
-
     async def execute(
         self,
+        user_repo: UserRepository,
         user_mobile_number: UserMobileNumber,
         user_email: UserEmail,
         hashed_password: HashedPassword,
     ) -> User:
-        if await self._user_repo.exists_by_mobile(user_mobile_number):
+        if await user_repo.exists_by_mobile(user_mobile_number):
             raise DuplicateUserInformation(user_mobile=user_mobile_number)
-        if await self._user_repo.exists_by_email(user_email):
+        if await user_repo.exists_by_email(user_email):
             raise DuplicateUserInformation(user_email=user_email)
 
         user = User(
@@ -34,5 +32,5 @@ class CreateUserUseCase:
             hashed_password=hashed_password,
         )
 
-        await self._user_repo.save(user)
+        await user_repo.save(user)
         return user

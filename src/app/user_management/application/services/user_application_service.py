@@ -10,13 +10,16 @@ from src.app.user_management.application.commands.create_user_command import (
     CreateUserCommand,
 )
 from src.app.user_management.application.dtos.user_dtos import UserDTO
+from src.app.user_management.domain.ports.driven.unit_of_work import UnitOfWork
 
 
 class UserApplicationService:
-    def __init__(self, create_user_uc: CreateUserUseCase):
-        self.create_user_uc = create_user_uc
+    def __init__(self):
+        self.create_user_uc = CreateUserUseCase()
 
-    async def create_user(self, create_user_command: CreateUserCommand) -> UserDTO:
+    async def create_user(
+        self, uow: UnitOfWork, create_user_command: CreateUserCommand
+    ) -> UserDTO:
         user_email = UserEmail(email=create_user_command.user_email)
         user_mobile_number = UserMobileNumber(
             mobile=create_user_command.user_mobile_number
@@ -25,7 +28,9 @@ class UserApplicationService:
         hashed_password = HashedPassword(
             hashed_password=create_user_command.plain_password
         )
-        user = await self.create_user_uc.execute(
-            user_mobile_number, user_email, hashed_password
-        )
+        async with uow:
+            user = await self.create_user_uc.execute(
+                uow.user_repo, user_mobile_number, user_email, hashed_password
+            )
+            await uow.commit()
         return UserDTO.from_entity(user)

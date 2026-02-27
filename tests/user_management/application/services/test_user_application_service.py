@@ -6,14 +6,14 @@ from src.app.user_management.application.dtos.user_dtos import UserDTO
 
 
 @pytest.mark.asyncio
-async def test_create_user(user_application_service):
+async def test_create_user(user_application_service, uow):
     command = CreateUserCommand(
         user_mobile_number="0123456789",
         user_email="johnDoe@example.com",
         plain_password="JohnsPlainPassword",
     )
 
-    user_dto: UserDTO = await user_application_service.create_user(command)
+    user_dto: UserDTO = await user_application_service.create_user(uow, command)
 
     assert user_dto.id is not None
     assert user_dto.mobile_num == command.user_mobile_number

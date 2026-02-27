@@ -13,9 +13,10 @@ from tests.user_management.application.conftest import (
 
 
 @pytest.mark.asyncio
-async def test_create_user(create_user_uc):
+async def test_create_user(create_user_uc, user_repo):
 
     user = await create_user_uc.execute(
+        user_repo=user_repo,
         user_email=_DEFAULT_USER_EMAIL,
         user_mobile_number=_DEFAULT_USER_MOBILE,
         hashed_password=_DEFAULT_USER_HASHED_PASSWORD,
@@ -25,26 +26,32 @@ async def test_create_user(create_user_uc):
 
 
 @pytest.mark.asyncio
-async def test_duplicate_user_mobile(create_user_seeded_uc):
+async def test_duplicate_user_mobile(create_user_uc, seeded_user_repo):
     email = UserEmail(email="user1@company.com")
     mobile = _DEFAULT_USER_MOBILE
     hashed_passwd = HashedPassword(hashed_password="#!!$$#hsdvafb")
 
     with pytest.raises(DuplicateUserInformation) as e:
-        user = await create_user_seeded_uc.execute(
-            user_email=email, user_mobile_number=mobile, hashed_password=hashed_passwd
+        user = await create_user_uc.execute(
+            user_repo=seeded_user_repo,
+            user_email=email,
+            user_mobile_number=mobile,
+            hashed_password=hashed_passwd,
         )
     assert e.value.context.get("user_mobile") == mobile
 
 
 @pytest.mark.asyncio
-async def test_duplicate_user_email(create_user_seeded_uc):
+async def test_duplicate_user_email(create_user_uc, seeded_user_repo):
     email = _DEFAULT_USER_EMAIL
     mobile = UserMobileNumber(mobile="0000000000")
     hashed_passwd = HashedPassword(hashed_password="#!!$$#hsdvafb")
 
     with pytest.raises(DuplicateUserInformation) as e:
-        user = await create_user_seeded_uc.execute(
-            user_email=email, user_mobile_number=mobile, hashed_password=hashed_passwd
+        user = await create_user_uc.execute(
+            user_repo=seeded_user_repo,
+            user_email=email,
+            user_mobile_number=mobile,
+            hashed_password=hashed_passwd,
         )
     assert e.value.context.get("user_email") == email

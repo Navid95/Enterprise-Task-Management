@@ -1,20 +1,36 @@
-from src.app.user_management.application.services.user_application_service import UserApplicationService
-from src.app.user_management.application.use_cases.create_user_use_case import CreateUserUseCase
-from tests.user_management.adapters.driven.fake_user_repo import FakeUserRepoInMemory
+from typing import Callable
+
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
+from src.app.infrastructure.persistence.db.session import get_session_factory
+from src.app.user_management.domain.ports.driven.user_repo import UserRepository
+from src.app.user_management.infrastructure.persistence.async_user_repo_sql import (
+    AsyncSQLUserRepository,
+)
+from src.app.user_management.infrastructure.persistence.sql_alchemy_uow import (
+    AsyncSQLUnitOfWork,
+)
+from src.app.user_management.application.services.user_application_service import (
+    UserApplicationService,
+)
 
 
 class Container:
     def __init__(self):
-        self.user_repo = FakeUserRepoInMemory()
-        self.create_user_uc = CreateUserUseCase(self.user_repo)
-        self.user_application_service = UserApplicationService(self.create_user_uc)
+        # factories
+        self._user_repo_factory: Callable[[AsyncSession], UserRepository] = (
+            AsyncSQLUserRepository
+        )
+        self._session_factory: async_sessionmaker[AsyncSession] = get_session_factory()
 
-    def get_user_application_service(self, uow=None, use_case=None):
+        # Singletons
+        self.user_application_service: UserApplicationService = UserApplicationService()
+
+    def get_user_application_service(self):
         return self.user_application_service
 
-    def get_user_repo(self, session):
-        ...
-    def get_session(self):
-        ...
-    def get_use_case(self, user_repo):
-        ...
+    def get_uow(self):
+        return AsyncSQLUnitOfWork(
+            session_factory=self._session_factory,
+            user_repo_factory=self._user_repo_factory,
+        )
