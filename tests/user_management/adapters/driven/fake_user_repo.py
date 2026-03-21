@@ -1,3 +1,4 @@
+from sqlalchemy.exc import IntegrityError
 from src.app.user_management.domain.entities.users import User
 from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 from src.app.user_management.domain.value_objects.user_info import (
@@ -30,11 +31,11 @@ class FakeUserRepoInMemory(UserRepository):
 
     async def save(self, user: User):
         if any([x for x in self._users.keys() if x.id == user.id]):
-            raise DuplicateUserInformation()
+            raise IntegrityError(orig=BaseException(), statement="duplicate ID", hide_parameters=False, params={})
         elif await self.exists_by_email(user.email_address):
-            raise DuplicateUserInformation(user_email=user.email_address)
+            raise IntegrityError(orig=BaseException(), statement="duplicate email", hide_parameters=False, params={})
         elif await self.exists_by_mobile(user.mobile_num):
-            raise DuplicateUserInformation(user_mobile=user.mobile_num)
+            raise IntegrityError(orig=BaseException(), statement="duplicate mobile", hide_parameters=False, params={})
         self._users[user.id] = user
 
     async def get_by_mobile(self, mobile: UserMobileNumber) -> User:

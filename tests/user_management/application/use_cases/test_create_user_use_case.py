@@ -5,7 +5,7 @@ from src.app.user_management.domain.value_objects.user_info import (
     HashedPassword,
 )
 from src.app.user_management.domain.exceptions import DuplicateUserInformation
-from tests.user_management.application.conftest import (
+from tests.conftest import (
     _DEFAULT_USER_EMAIL,
     _DEFAULT_USER_MOBILE,
     _DEFAULT_USER_HASHED_PASSWORD,

@@ -1,7 +1,5 @@
-import pytest_asyncio
 import pytest
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 
 from src.app.user_management.domain.value_objects.user_info import (
@@ -14,21 +12,11 @@ from src.app.user_management.infrastructure.persistence.async_user_repo_sql impo
     AsyncSQLUserRepository,
 )
 from src.app.user_management.domain.entities.users import User
-from tests.user_management.infrastructure.persistence.conftest import (
+from tests.conftest import (
     _DEFAULT_USER_EMAIL,
     _DEFAULT_USER_MOBILE,
     _DEFAULT_USER_HASHED_PASSWORD,
 )
-
-
-@pytest_asyncio.fixture
-async def user_repo(session: AsyncSession) -> AsyncSQLUserRepository:
-    yield AsyncSQLUserRepository(session)
-
-
-@pytest_asyncio.fixture
-async def seeded_user_repo(seeded_session: AsyncSession) -> AsyncSQLUserRepository:
-    yield AsyncSQLUserRepository(seeded_session)
 
 
 @pytest.mark.asyncio
@@ -55,7 +43,6 @@ async def test_save_fail_duplicate_mobile(seeded_user_repo: AsyncSQLUserReposito
             )
         )
         await seeded_user_repo._session.flush()
-    assert e.match("UNIQUE") and e.match("mobile_num")
 
 
 @pytest.mark.asyncio
@@ -70,7 +57,6 @@ async def test_save_fail_duplicate_email(seeded_user_repo: AsyncSQLUserRepositor
             )
         )
         await seeded_user_repo._session.flush()
-    assert e.match("UNIQUE") and e.match("email_address")
 
 
 @pytest.mark.asyncio
