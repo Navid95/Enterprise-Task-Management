@@ -11,6 +11,7 @@ class Settings(BaseSettings):
         env_file=f"{BASE_DIR}/.env",
         env_file_encoding="utf-8",
         case_sensitive=True,
+        env_file_required=False
     )
 
 
