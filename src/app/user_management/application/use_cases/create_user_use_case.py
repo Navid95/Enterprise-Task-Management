@@ -1,18 +1,17 @@
 from src.app.user_management.domain.entities.users import User
-from src.app.user_management.domain.value_objects.user_info import (
-    UserId,
-    UserEmail,
-    UserMobileNumber,
-    HashedPassword,
-)
 from src.app.user_management.domain.exceptions import (
     DuplicateUserInformation,
 )
 from src.app.user_management.domain.ports.driven.user_repo import UserRepository
+from src.app.user_management.domain.value_objects.user_info import (
+    HashedPassword,
+    UserEmail,
+    UserId,
+    UserMobileNumber,
+)
 
 
 class CreateUserUseCase:
-
     async def execute(
         self,
         user_repo: UserRepository,

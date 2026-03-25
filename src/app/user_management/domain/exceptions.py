@@ -1,10 +1,10 @@
 from src.app.core.exceptions import DomainError
+from src.app.user_management.domain.value_objects.team import TeamId
 from src.app.user_management.domain.value_objects.user_info import (
-    UserId,
     UserEmail,
+    UserId,
     UserMobileNumber,
 )
-from src.app.user_management.domain.value_objects.team import TeamId
 
 
 class BaseUserManagementError(DomainError):

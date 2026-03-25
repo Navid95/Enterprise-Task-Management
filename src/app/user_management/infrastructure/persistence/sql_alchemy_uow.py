@@ -1,11 +1,12 @@
 from typing import Callable
+
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
 from src.app.user_management.domain.ports.driven.unit_of_work import UnitOfWork
 from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 
 
 class AsyncSQLUnitOfWork(UnitOfWork):
-
     def __init__(
         self,
         session_factory: async_sessionmaker[AsyncSession],

@@ -1,14 +1,15 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from src.app.user_management.infrastructure.persistence.models import UserModel
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from src.app.user_management.domain.entities.users import User
+from src.app.user_management.domain.exceptions import UserNotFound
 from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 from src.app.user_management.domain.value_objects.user_info import (
-    UserMobileNumber,
     UserEmail,
     UserId,
+    UserMobileNumber,
 )
-from src.app.user_management.domain.exceptions import UserNotFound
+from src.app.user_management.infrastructure.persistence.models import UserModel
 
 
 class AsyncSQLUserRepository(UserRepository):
@@ -50,15 +51,11 @@ class AsyncSQLUserRepository(UserRepository):
             return user_model.to_entity()
 
     async def exists_by_email(self, email: UserEmail) -> bool:
-        stm = select(
-            select(UserModel).where(UserModel.email_address == email.email).exists()
-        )
+        stm = select(select(UserModel).where(UserModel.email_address == email.email).exists())
         result = await self._session.execute(stm)
         return result.scalar()
 
     async def exists_by_mobile(self, mobile: UserMobileNumber) -> bool:
-        stm = select(
-            select(UserModel).where(UserModel.mobile_num == mobile.mobile).exists()
-        )
+        stm = select(select(UserModel).where(UserModel.mobile_num == mobile.mobile).exists())
         result = await self._session.execute(stm)
         return result.scalar()

@@ -1,8 +1,12 @@
-from pydantic import Field, model_validator
 from datetime import datetime, timedelta
 from uuid import UUID
+
+from pydantic import Field, model_validator
+
 from src.app.task_management.domain.entities.base import Base
-from src.app.task_management.domain.entities.task_exceptions import InvalidStartEndDateRange
+from src.app.task_management.domain.entities.task_exceptions import (
+    InvalidStartEndDateRange,
+)
 
 _DEFAULT_TASK_DURATION_MINUTES_ = 1 * 24 * 60
 
@@ -22,6 +26,7 @@ class Task(Base):
     @model_validator(mode="after")
     def validate_start_end(self):
         if self.start >= self.end:
-            raise InvalidStartEndDateRange.as_pydantic_error(start_date=self.start, end_date=self.end)
+            raise InvalidStartEndDateRange.as_pydantic_error(
+                start_date=self.start, end_date=self.end
+            )
         return self
-

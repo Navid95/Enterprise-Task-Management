@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from contextlib import AbstractAsyncContextManager
+
 from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 
 

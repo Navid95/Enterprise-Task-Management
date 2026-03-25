@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
+
 from src.app.user_management.domain.entities.users import User
 from src.app.user_management.domain.value_objects.user_info import (
-    UserId,
     UserEmail,
+    UserId,
     UserMobileNumber,
 )
 
 
 class UserRepository(ABC):
-
     @abstractmethod
     async def get_by_id(self, user_id: UserId) -> User:
         """

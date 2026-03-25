@@ -1,4 +1,5 @@
 import pytest
+
 from src.app.user_management.application.commands.create_user_command import (
     CreateUserCommand,
 )

@@ -1,15 +1,16 @@
 from pydantic import BaseModel, Field
-from src.app.user_management.domain.value_objects.user_info import (
-    UserEmail,
-    UserMobileNumber,
-    UserId,
-    HashedPassword,
-)
-from src.app.user_management.domain.value_objects.team import TeamId
+
 from src.app.user_management.domain.exceptions import (
-    NotTeamManagerError,
     MemberAlreadyInTeamError,
     MemberNotInTeamError,
+    NotTeamManagerError,
+)
+from src.app.user_management.domain.value_objects.team import TeamId
+from src.app.user_management.domain.value_objects.user_info import (
+    HashedPassword,
+    UserEmail,
+    UserId,
+    UserMobileNumber,
 )
 
 
@@ -42,5 +43,5 @@ class Team(BaseModel):
             raise MemberNotInTeamError(member_id=member_id, team_id=self.id)
         try:
             self.members.remove(member_id)
-        except KeyError as e:
+        except KeyError:
             raise MemberNotInTeamError(member_id=member_id, team_id=self.id)

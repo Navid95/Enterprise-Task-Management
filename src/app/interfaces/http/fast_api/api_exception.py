@@ -1,10 +1,11 @@
 from fastapi.exceptions import HTTPException
+
 from src.app.core.exceptions import DomainError
 from src.app.user_management.domain.exceptions import (
-    NotTeamManagerError,
+    DuplicateUserInformation,
     MemberAlreadyInTeamError,
     MemberNotInTeamError,
-    DuplicateUserInformation,
+    NotTeamManagerError,
     UserNotFound,
 )
 

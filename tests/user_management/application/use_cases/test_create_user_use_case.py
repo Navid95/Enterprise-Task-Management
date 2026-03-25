@@ -1,14 +1,15 @@
 import pytest
+
+from src.app.user_management.domain.exceptions import DuplicateUserInformation
 from src.app.user_management.domain.value_objects.user_info import (
+    HashedPassword,
     UserEmail,
     UserMobileNumber,
-    HashedPassword,
 )
-from src.app.user_management.domain.exceptions import DuplicateUserInformation
 from tests.conftest import (
     _DEFAULT_USER_EMAIL,
-    _DEFAULT_USER_MOBILE,
     _DEFAULT_USER_HASHED_PASSWORD,
+    _DEFAULT_USER_MOBILE,
 )
 
 
@@ -32,7 +33,7 @@ async def test_duplicate_user_mobile(create_user_uc, seeded_user_repo):
     hashed_passwd = HashedPassword(hashed_password="#!!$$#hsdvafb")
 
     with pytest.raises(DuplicateUserInformation) as e:
-        user = await create_user_uc.execute(
+        await create_user_uc.execute(
             user_repo=seeded_user_repo,
             user_email=email,
             user_mobile_number=mobile,
@@ -48,7 +49,7 @@ async def test_duplicate_user_email(create_user_uc, seeded_user_repo):
     hashed_passwd = HashedPassword(hashed_password="#!!$$#hsdvafb")
 
     with pytest.raises(DuplicateUserInformation) as e:
-        user = await create_user_uc.execute(
+        await create_user_uc.execute(
             user_repo=seeded_user_repo,
             user_email=email,
             user_mobile_number=mobile,

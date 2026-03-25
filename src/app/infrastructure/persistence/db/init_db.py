@@ -1,5 +1,9 @@
-from src.app.infrastructure.persistence.db.session import init_engine, close_engine, get_engine
 from src.app.infrastructure.persistence.base import BaseModel
+from src.app.infrastructure.persistence.db.session import (
+    close_engine,
+    get_engine,
+    init_engine,
+)
 
 
 async def create_tables() -> None:

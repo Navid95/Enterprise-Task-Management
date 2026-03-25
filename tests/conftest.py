@@ -1,19 +1,20 @@
+from typing import Type
+
 import pytest
 import pytest_asyncio
-from typing import Type
 from pytest import FixtureRequest
-from sqlalchemy import StaticPool, insert, NullPool
+from sqlalchemy import NullPool, StaticPool, insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from src.app.infrastructure.persistence.base import BaseModel
 from src.app.user_management.domain.entities.users import User
-from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 from src.app.user_management.domain.ports.driven.unit_of_work import UnitOfWork
+from src.app.user_management.domain.ports.driven.user_repo import UserRepository
 from src.app.user_management.domain.value_objects.user_info import (
-    UserEmail,
-    UserMobileNumber,
     HashedPassword,
+    UserEmail,
     UserId,
+    UserMobileNumber,
 )
 from src.app.user_management.infrastructure.persistence.async_user_repo_sql import (
     AsyncSQLUserRepository,
@@ -22,12 +23,10 @@ from src.app.user_management.infrastructure.persistence.models import UserModel
 from src.app.user_management.infrastructure.persistence.sql_alchemy_uow import (
     AsyncSQLUnitOfWork,
 )
-
+from tests.user_management.adapters.driven.fake_user_repo import FakeUserRepoInMemory
 from tests.user_management.infrastructure.persistence.fake_in_memory_uow import (
     FakeUnitOfWorkInMemory,
 )
-from tests.user_management.adapters.driven.fake_user_repo import FakeUserRepoInMemory
-
 
 _DEFAULT_USER_EMAIL = UserEmail(email="default@persistance.com")
 _DEFAULT_USER_MOBILE = UserMobileNumber(mobile="1234567890")
