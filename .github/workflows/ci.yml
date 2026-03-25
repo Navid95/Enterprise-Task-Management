@@ -1,0 +1,38 @@
+name: CI
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    lint-and-test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+
+            - name: Cache Poetry virtualenv
+              uses: actions/cache@v4
+              with:
+                path: ~/.cache/pypoetry/virtualenvs
+                key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+
+            - name: Install Dependencies
+              run: |
+                  pip install poetry --root-user-action=ignore
+                  poetry install --with dev --no-root
+
+            - name: Check Formatting
+              run: poetry run ruff format --check .
+
+            - name: Lint
+              run: poetry run ruff check .
+
+            - name: Test with pytest
+              run: poetry run pytest --db=memory
+
