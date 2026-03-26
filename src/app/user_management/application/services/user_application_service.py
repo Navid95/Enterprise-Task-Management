@@ -2,6 +2,7 @@ from src.app.user_management.application.commands.create_user_command import (
     CreateUserCommand,
 )
 from src.app.user_management.application.dtos.user_dtos import UserDTO
+from src.app.user_management.application.ports.password_hasher import IPasswordHasher
 from src.app.user_management.application.use_cases.create_user_use_case import (
     CreateUserUseCase,
 )
@@ -10,7 +11,6 @@ from src.app.user_management.domain.value_objects.user_info import (
     UserEmail,
     UserMobileNumber,
 )
-from src.app.user_management.application.ports.password_hasher import IPasswordHasher
 
 
 class UserApplicationService:

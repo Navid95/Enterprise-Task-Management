@@ -3,7 +3,6 @@ from src.app.user_management.domain.value_objects.user_info import HashedPasswor
 
 
 class FakePasswordHasher(IPasswordHasher):
-
     def verify(self, plain_password: str, hashed_password: HashedPassword) -> bool:
         return self.hash_password(plain_password) == hashed_password
 

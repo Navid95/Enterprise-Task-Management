@@ -1,11 +1,11 @@
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
+
 from src.app.user_management.application.ports.password_hasher import IPasswordHasher
 from src.app.user_management.domain.value_objects.user_info import HashedPassword
 
 
 class Argon2PasswordHasher(IPasswordHasher):
-
     def __init__(self):
         self.hasher = PasswordHasher()
 

@@ -6,7 +6,6 @@ from src.app.user_management.application.services.user_application_service impor
 from src.app.user_management.application.use_cases.create_user_use_case import (
     CreateUserUseCase,
 )
-
 from tests.user_management.infrastructure.security.fake_password_hasher import FakePasswordHasher
 
 
