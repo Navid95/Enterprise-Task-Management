@@ -7,6 +7,8 @@ from src.app.user_management.application.use_cases.create_user_use_case import (
     CreateUserUseCase,
 )
 
+from tests.user_management.infrastructure.security.fake_password_hasher import FakePasswordHasher
+
 
 @pytest.fixture()
 def create_user_uc():
@@ -15,4 +17,4 @@ def create_user_uc():
 
 @pytest.fixture()
 def user_application_service():
-    yield UserApplicationService()
+    yield UserApplicationService(FakePasswordHasher())
