@@ -36,6 +36,7 @@ dev = [
 
 [tool.ruff]
 line-length = 100
+exclude = ["alembic/"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
