@@ -108,34 +108,47 @@ Domain exceptions (e.g. `DuplicateUserInformation`, `UserNotFound`) are raised i
 | ASGI server | Uvicorn |
 | ORM | SQLAlchemy 2.0 (async) |
 | DB drivers | asyncpg (PostgreSQL), aiosqlite (SQLite) |
+| Migrations | Alembic |
+| Database | PostgreSQL 16 |
 | Validation | Pydantic v2 |
 | Testing | pytest, pytest-asyncio |
 | Packaging | Poetry |
 | Runtime | Python 3.12 |
+| Local dev | Docker Compose |
 
 ---
 
 ## Running the Project
 
-### With Docker
+### With Docker Compose (recommended)
 
 ```bash
-docker build -t etm:dev .
-docker run --rm -p 8000:8000 etm:dev
+cp .env.example .env        # fill in your values
+docker compose -f docker-compose.dev.yml up -d
+alembic upgrade head        # run migrations
 ```
 
-> The container needs a reachable PostgreSQL instance. Set `DATABASE_URL` via environment variable or a `.env` file.
+The API will be available at `http://localhost:8000`.
 
 ### Locally with Poetry
 
 ```bash
 poetry install
+alembic upgrade head
 uvicorn src.app.main:app --reload
 ```
+
+> Requires a running PostgreSQL instance. Set `DATABASE_URL` in a `.env` file (see `.env.example`).
 
 ---
 
 ## Configuration
+
+Copy `.env.example` to `.env` and fill in the values:
+
+```bash
+cp .env.example .env
+```
 
 The app reads `DATABASE_URL` from environment variables, with an optional `.env` file as fallback. Environment variables take precedence.
 
