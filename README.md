@@ -1,6 +1,14 @@
 # Enterprise Task Management
 
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white)
+
 A backend API built with **Hexagonal Architecture** and **Domain-Driven Design (DDD)** principles, using Python, FastAPI, and SQLAlchemy (async). This project is a deliberate study in applying enterprise patterns — the goal is not just to make it work, but to make it architecturally honest.
+
+> Built to explore how far you can push clean architecture in Python before framework magic becomes a liability.
 
 ---
 
