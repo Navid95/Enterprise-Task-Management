@@ -30,7 +30,9 @@ from tests.user_management.infrastructure.persistence.fake_in_memory_uow import 
 
 _DEFAULT_USER_EMAIL = UserEmail(email="default@persistance.com")
 _DEFAULT_USER_MOBILE = UserMobileNumber(mobile="1234567890")
+# Must be the upper-cased version of _DEFAULT_USER_PLAIN_PASSWORD (FakePasswordHasher upper cases)
 _DEFAULT_USER_HASHED_PASSWORD = HashedPassword(hashed_password="!@#$%^&*()_+")
+_DEFAULT_USER_PLAIN_PASSWORD ="!@#$%^&*()_+"
 
 
 def pytest_addoption(parser):
