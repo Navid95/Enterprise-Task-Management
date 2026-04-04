@@ -1,14 +1,13 @@
+from src.app.user_management.application.commands.login_command import LoginCommand
+from src.app.user_management.application.exceptions.auth import AuthenticationError
 from src.app.user_management.application.ports.auth_token_service import IAuthTokenService
 from src.app.user_management.application.ports.password_hasher import IPasswordHasher
 from src.app.user_management.domain.exceptions import UserNotFound
 from src.app.user_management.domain.ports.driven.user_repo import UserRepository
-from src.app.user_management.application.commands.login_command import LoginCommand
-from src.app.user_management.domain.value_objects.user_info import UserEmail, HashedPassword
-from src.app.user_management.application.exceptions.auth import AuthenticationError
+from src.app.user_management.domain.value_objects.user_info import UserEmail
 
 
 class AuthenticationService:
-
     def __init__(self, token_service: IAuthTokenService, passwd_hasher: IPasswordHasher):
         self._token_service = token_service
         self._password_hasher = passwd_hasher

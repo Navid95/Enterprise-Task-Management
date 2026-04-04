@@ -16,13 +16,11 @@ class JWTTokenService(IAuthTokenService):
     def generate_token(self, user_id: UUID) -> str:
         iat = datetime.now(timezone.utc)
         exp = iat + timedelta(minutes=self._expiry_minutes)
-        token = jwt.encode(payload={
-            "sub": user_id.hex,
-            "iat": iat.timestamp(),
-            "exp": exp.timestamp()
-        },
+        token = jwt.encode(
+            payload={"sub": user_id.hex, "iat": iat.timestamp(), "exp": exp.timestamp()},
             key=self._enc_key,
-            algorithm="HS256")
+            algorithm="HS256",
+        )
         return token
 
     def verify_token(self, token: str) -> UUID:

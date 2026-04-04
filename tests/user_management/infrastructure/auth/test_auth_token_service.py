@@ -1,5 +1,5 @@
-
 from uuid import UUID, uuid4
+
 import pytest
 
 from src.app.user_management.application.exceptions.auth import AuthenticationError
@@ -34,4 +34,3 @@ def test_verify_token_expired(auth_token_service_expired: IAuthTokenService):
     token = auth_token_service_expired.generate_token(user_id=_TEST_UUID)
     with pytest.raises(AuthenticationError):
         auth_token_service_expired.verify_token(token)
-

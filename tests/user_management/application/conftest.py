@@ -1,6 +1,8 @@
 import pytest
 
-from src.app.user_management.application.services.authentication_service import AuthenticationService
+from src.app.user_management.application.services.authentication_service import (
+    AuthenticationService,
+)
 from src.app.user_management.application.services.user_application_service import (
     UserApplicationService,
 )

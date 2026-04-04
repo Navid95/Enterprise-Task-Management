@@ -9,4 +9,3 @@ class FakeTokenService(IAuthTokenService):
 
     def verify_token(self, token: str) -> UUID:
         return UUID(token)
-

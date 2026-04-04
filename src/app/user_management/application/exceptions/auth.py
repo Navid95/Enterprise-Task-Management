@@ -14,6 +14,4 @@ class AuthenticationError(BaseAuthException):
     """
 
     def __init__(self, reason: str | None = None):
-        super().__init__(context={
-            "reason": reason
-        })
+        super().__init__(context={"reason": reason})
