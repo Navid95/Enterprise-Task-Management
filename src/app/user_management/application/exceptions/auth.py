@@ -1,4 +1,7 @@
-class BaseAuthException(Exception):
+from src.app.core.exceptions import DomainError
+
+
+class BaseAuthException(DomainError):
     """
     Base class for all authentication & authorization exceptions.
     """

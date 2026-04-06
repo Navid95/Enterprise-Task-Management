@@ -1,7 +1,8 @@
 from pydantic import BaseModel, ConfigDict
 
 
-class LoginCommand(BaseModel):
+class TokenDTO(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
-    email: str
-    password: str
+
+    access_token: str
+    token_type: str = "bearer"

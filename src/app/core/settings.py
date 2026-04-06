@@ -6,7 +6,12 @@ BASE_DIR = Path(__file__).resolve().parents[3]
 
 
 class Settings(BaseSettings):
+    # DB
     DATABASE_URL: str
+
+    # TOKEN
+    ENCRYPTION_KEY: str
+    EXPIRY_DURATION: int
 
     model_config = SettingsConfigDict(
         env_file=f"{BASE_DIR}/.env",
