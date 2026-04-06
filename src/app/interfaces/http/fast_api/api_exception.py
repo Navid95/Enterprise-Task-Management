@@ -1,6 +1,7 @@
 from fastapi.exceptions import HTTPException
 
 from src.app.core.exceptions import DomainError
+from src.app.user_management.application.exceptions.auth import AuthenticationError
 from src.app.user_management.domain.exceptions import (
     DuplicateUserInformation,
     MemberAlreadyInTeamError,
@@ -47,6 +48,7 @@ _DOMAIN_TO_HTTP: dict[type(DomainError), int] = {
     MemberNotInTeamError: 409,
     DuplicateUserInformation: 409,
     UserNotFound: 404,
+    AuthenticationError: 401,
 }
 
 

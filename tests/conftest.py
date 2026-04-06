@@ -3,7 +3,7 @@ from typing import Type
 import pytest
 import pytest_asyncio
 from pytest import FixtureRequest
-from sqlalchemy import NullPool, StaticPool, insert
+from sqlalchemy import NullPool, StaticPool, delete, insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from src.app.infrastructure.persistence.base import BaseModel
@@ -30,7 +30,9 @@ from tests.user_management.infrastructure.persistence.fake_in_memory_uow import 
 
 _DEFAULT_USER_EMAIL = UserEmail(email="default@persistance.com")
 _DEFAULT_USER_MOBILE = UserMobileNumber(mobile="1234567890")
+# Must be the upper-cased version of _DEFAULT_USER_PLAIN_PASSWORD (FakePasswordHasher upper cases)
 _DEFAULT_USER_HASHED_PASSWORD = HashedPassword(hashed_password="!@#$%^&*()_+")
+_DEFAULT_USER_PLAIN_PASSWORD = "!@#$%^&*()_+"
 
 
 def pytest_addoption(parser):
@@ -149,14 +151,20 @@ def uow(db_backend, user_repo_factory, session_factory) -> UnitOfWork:
 
 
 @pytest_asyncio.fixture()
-async def seeded_uow(uow) -> UnitOfWork:
-    with uow:
-        await uow.user_repo.save(
-            User(
-                id=UserId(),
-                mobile_num=_DEFAULT_USER_MOBILE,
-                email_address=_DEFAULT_USER_EMAIL,
-                hashed_password=_DEFAULT_USER_HASHED_PASSWORD,
-            )
+async def seeded_uow(db_backend, uow) -> UnitOfWork:
+    async with uow:
+        user = User(
+            id=UserId(),
+            mobile_num=_DEFAULT_USER_MOBILE,
+            email_address=_DEFAULT_USER_EMAIL,
+            hashed_password=_DEFAULT_USER_HASHED_PASSWORD,
         )
+        await uow.user_repo.save(user)
+        await uow.commit()
     yield uow
+
+    if db_backend != "memory":
+        async with uow:
+            stm = delete(UserModel).where(UserModel.id == user.id.id)
+            await uow._session.execute(stm)
+            await uow.commit()
