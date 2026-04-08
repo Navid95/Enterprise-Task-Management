@@ -52,3 +52,6 @@ class Container:
 
     def get_auth_service(self):
         return self.auth_service
+
+    def get_token_service(self) -> IAuthTokenService:
+        return self.token_service

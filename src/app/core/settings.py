@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     ENCRYPTION_KEY: str
     EXPIRY_DURATION: int
 
+    # ADMIN USER
+    ADMIN_EMAIL: str
+    ADMIN_PASSWORD: str
+
     model_config = SettingsConfigDict(
         env_file=f"{BASE_DIR}/.env",
         env_file_encoding="utf-8",
