@@ -26,7 +26,7 @@ from src.app.user_management.domain.ports.driven.unit_of_work import UnitOfWork
 user_v1 = APIRouter(prefix="/users")
 
 
-@user_v1.post(path="/", dependencies=[Depends(current_user)])
+@user_v1.post(path="/", dependencies=[Depends(current_user)], status_code=201)
 async def create_user(
     body: CreateUserSchema,
     uow: Annotated[UnitOfWork, Depends(get_uow)],
