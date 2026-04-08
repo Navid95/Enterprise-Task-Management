@@ -2,6 +2,9 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends
 
+from src.app.user_management.adapters.driving.fast_api.dependencies.auth_dependencies import (
+    current_user,
+)
 from src.app.user_management.adapters.driving.fast_api.dependencies.uow_dependencies import (
     get_uow,
 )
@@ -23,7 +26,7 @@ from src.app.user_management.domain.ports.driven.unit_of_work import UnitOfWork
 user_v1 = APIRouter(prefix="/users")
 
 
-@user_v1.post(path="/")
+@user_v1.post(path="/", dependencies=[Depends(current_user)], status_code=201)
 async def create_user(
     body: CreateUserSchema,
     uow: Annotated[UnitOfWork, Depends(get_uow)],
