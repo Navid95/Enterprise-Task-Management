@@ -9,13 +9,15 @@ from src.app.user_management.adapters.driving.fast_api.controllers.auth_controll
 from src.app.user_management.adapters.driving.fast_api.controllers.user_controller import (
     user_v1,
 )
+from src.app.core.settings import Settings
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # start up
-    init_engine()
-    app.container = Container()
+    settings = Settings()
+    init_engine(settings)
+    app.container = Container(settings)
     yield
     # shutdown
     await close_engine()

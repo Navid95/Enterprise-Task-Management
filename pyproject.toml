@@ -42,3 +42,6 @@ exclude = ["alembic/"]
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 
+ [tool.pytest.ini_options]
+  markers = ["unit: unit test with fake dependencies", "integration: integration test with real dependencies"]
+  asyncio_mode = "strict"

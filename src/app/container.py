@@ -2,7 +2,7 @@ from typing import Callable
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from src.app.core.settings import settings
+from src.app.core.settings import Settings
 from src.app.infrastructure.persistence.db.session import get_session_factory
 from src.app.user_management.application.ports.auth_token_service import IAuthTokenService
 from src.app.user_management.application.ports.password_hasher import IPasswordHasher
@@ -24,12 +24,13 @@ from src.app.user_management.infrastructure.security.argon2_hasher import Argon2
 
 
 class Container:
-    def __init__(self):
+    def __init__(self, settings: Settings | None = None):
         # factories
         self._user_repo_factory: Callable[[AsyncSession], UserRepository] = AsyncSQLUserRepository
         self._session_factory: async_sessionmaker[AsyncSession] = get_session_factory()
 
         # Singletons
+        self._settings = settings or Settings()
         self.password_hasher: IPasswordHasher = Argon2PasswordHasher()
         self.token_service: IAuthTokenService = JWTTokenService(
             enc_key=settings.ENCRYPTION_KEY, expiry_minutes=settings.EXPIRY_DURATION
@@ -55,3 +56,7 @@ class Container:
 
     def get_token_service(self) -> IAuthTokenService:
         return self.token_service
+
+    @property
+    def settings(self):
+        return self._settings

@@ -4,6 +4,8 @@ from src.app.user_management.application.commands.login_command import LoginComm
 from src.app.user_management.application.exceptions.auth import AuthenticationError
 from tests.conftest import _DEFAULT_USER_EMAIL, _DEFAULT_USER_PLAIN_PASSWORD
 
+pytestmark = [pytest.mark.unit]
+
 
 @pytest.mark.asyncio
 async def test_login(authentication_service, seeded_uow):

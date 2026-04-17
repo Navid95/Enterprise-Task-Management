@@ -5,6 +5,8 @@ from src.app.user_management.application.commands.create_user_command import (
 )
 from src.app.user_management.application.dtos.user_dtos import UserDTO
 
+pytestmark = [pytest.mark.unit]
+
 
 @pytest.mark.asyncio
 async def test_create_user(user_application_service, uow):

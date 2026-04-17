@@ -1,11 +1,13 @@
+from pathlib import Path
 from typing import Type
 
 import pytest
 import pytest_asyncio
-from pytest import FixtureRequest
-from sqlalchemy import NullPool, StaticPool, delete, insert
+from pytest import FixtureRequest, Item
+from sqlalchemy import NullPool, StaticPool, delete, insert, text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
+from src.app.core.settings import Settings
 from src.app.infrastructure.persistence.base import BaseModel
 from src.app.user_management.domain.entities.users import User
 from src.app.user_management.domain.ports.driven.unit_of_work import UnitOfWork
@@ -28,31 +30,52 @@ from tests.user_management.infrastructure.persistence.fake_in_memory_uow import 
     FakeUnitOfWorkInMemory,
 )
 
-_DEFAULT_USER_EMAIL = UserEmail(email="default@persistance.com")
+TEST_DIR = Path(__file__).resolve().parents[0]
+settings = Settings(_env_file=f"{TEST_DIR}/.env")
+
+_DEFAULT_USER_EMAIL = UserEmail(email=settings.ADMIN_EMAIL)
 _DEFAULT_USER_MOBILE = UserMobileNumber(mobile="1234567890")
 # Must be the upper-cased version of _DEFAULT_USER_PLAIN_PASSWORD (FakePasswordHasher upper cases)
-_DEFAULT_USER_HASHED_PASSWORD = HashedPassword(hashed_password="!@#$%^&*()_+")
-_DEFAULT_USER_PLAIN_PASSWORD = "!@#$%^&*()_+"
+_DEFAULT_USER_HASHED_PASSWORD = HashedPassword(hashed_password=settings.ADMIN_PASSWORD)
+_DEFAULT_USER_PLAIN_PASSWORD = settings.ADMIN_PASSWORD
+
+
+def pytest_runtest_setup(item: Item):
+    is_unit = any(True for marker in item.iter_markers() if marker.name == "unit")
+    is_integration = any(True for marker in item.iter_markers() if marker.name == "integration")
+    if not (is_unit or is_integration):
+        pytest.fail(f"Error on {item.nodeid}.The test should be marked with @pytest.mark.unit or"
+                    f" @pytest.mark.integration")
 
 
 def pytest_addoption(parser):
     parser.addoption(
         "--db",
         action="store",
-        default="memory",
-        choices=("memory", "sqlite", "postgres"),
+        default="auto",
+        choices=("memory", "sqlite", "postgres", "auto"),
         help="Select  DB backend for tests.",
     )
 
 
 @pytest.fixture(scope="session")
-def db_backend(request: FixtureRequest):
-    yield request.config.getoption("--db")
+def mark(request: FixtureRequest):
+    yield request.config.getoption("-m")
+
+
+@pytest.fixture(scope="session")
+def db_backend(request: FixtureRequest, mark):
+    if not mark:
+        yield request.config.getoption("--db")
+    elif mark == "integration":
+        yield "postgres"
+    elif mark == "unit":
+        yield "memory"
 
 
 @pytest_asyncio.fixture(scope="session")
 async def engine(db_backend):
-    if db_backend == "memory":
+    if db_backend in ["memory", "auto"]:
         yield None
     else:
         db_url = ""
@@ -61,8 +84,18 @@ async def engine(db_backend):
             db_url = "sqlite+aiosqlite:///:memory:"
             pool_class = StaticPool
         elif db_backend == "postgres":
-            db_url = "postgresql+asyncpg://taskflow:taskflowpass@localhost:5433/taskflow_db"
+            db_url = settings.DATABASE_URL
             pool_class = NullPool
+            sys_url = db_url.rsplit("/", 1)[0] + "/postgres"
+            db_name = db_url.rsplit("/", 1)[1]
+            _sys_engine = create_async_engine(sys_url, poolclass=NullPool, isolation_level="AUTOCOMMIT")
+            async with _sys_engine.connect() as conn:
+                exists = await conn.execute(
+                    text("SELECT 1 FROM pg_database WHERE datname = :name"), {"name": db_name}
+                )
+                if not exists.scalar():
+                    await conn.execute(text(f'CREATE DATABASE "{db_name}"'))
+            await _sys_engine.dispose()
         _engine = create_async_engine(
             db_url,
             poolclass=pool_class,

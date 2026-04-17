@@ -5,13 +5,13 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from src.app.core.settings import settings
+from src.app.core.settings import Settings
 
 _engine: AsyncEngine | None = None
 _session_factory: async_sessionmaker[AsyncSession] | None = None
 
 
-def init_engine() -> None:
+def init_engine(settings: Settings) -> None:
     """
     Call once on app startup.
     """

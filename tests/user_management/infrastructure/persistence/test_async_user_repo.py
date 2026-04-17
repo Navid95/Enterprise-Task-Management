@@ -16,6 +16,7 @@ from tests.conftest import (
     _DEFAULT_USER_HASHED_PASSWORD,
     _DEFAULT_USER_MOBILE,
 )
+pytestmark = [pytest.mark.integration]
 
 
 @pytest.mark.asyncio
