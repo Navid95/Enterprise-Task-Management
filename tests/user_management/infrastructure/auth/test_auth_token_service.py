@@ -9,6 +9,7 @@ from src.app.user_management.infrastructure.auth.jwt_token_service import JWTTok
 pytestmark = [pytest.mark.integration]
 _TEST_UUID: UUID = uuid4()
 
+
 @pytest.fixture(scope="module")
 def auth_token_service() -> IAuthTokenService:
     return JWTTokenService(enc_key="test_key", expiry_minutes=1)
