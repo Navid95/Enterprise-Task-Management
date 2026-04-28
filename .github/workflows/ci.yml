@@ -4,6 +4,16 @@ on:
     push:
     pull_request:
 
+env:
+    POSTGRES_USER: test
+    POSTGRES_PASSWORD: test
+    POSTGRES_DB: test
+    DATABASE_URL: postgresql+asyncpg://test:test@localhost:5432/test
+    ENCRYPTION_KEY: TESTENCRYPTIONKEY
+    EXPIRY_DURATION: 15
+    ADMIN_EMAIL: admin.test@company.com
+    ADMIN_PASSWORD: ADMIN1234
+
 jobs:
     lint-and-test:
         runs-on: ubuntu-latest
@@ -34,5 +44,45 @@ jobs:
               run: poetry run ruff check .
 
             - name: Test with pytest
-              run: poetry run pytest --db=memory
+              run: poetry run pytest -m unit
 
+
+    integration-test:
+        runs-on: ubuntu-latest
+
+        services:
+            postgres:
+                image: postgres:16-alpine
+                env:
+                    POSTGRES_USER: test
+                    POSTGRES_PASSWORD: test
+                    POSTGRES_DB: test
+                ports:
+                  - 5432:5432
+                options: >-
+                  --health-cmd pg_isready
+                  --health-interval 10s
+                  --health-timeout 5s
+                  --health-retries 5
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+
+            - name: Cache Poetry virtualenv
+              uses: actions/cache@v4
+              with:
+                path: ~/.cache/pypoetry/virtualenvs
+                key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+
+            - name: Install Dependencies
+              run: |
+                  pip install poetry --root-user-action=ignore
+                  poetry install --with dev --no-root
+
+            - name: Test with pytest
+              run: poetry run pytest -m integration

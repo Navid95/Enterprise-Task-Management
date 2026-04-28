@@ -1,3 +1,4 @@
+from sqlalchemy import Pool
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -5,13 +6,13 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from src.app.core.settings import settings
+from src.app.core.settings import Settings
 
 _engine: AsyncEngine | None = None
 _session_factory: async_sessionmaker[AsyncSession] | None = None
 
 
-def init_engine() -> None:
+def init_engine(settings: Settings, pool_class: Pool | None = None) -> None:
     """
     Call once on app startup.
     """
@@ -20,10 +21,7 @@ def init_engine() -> None:
         return
 
     _engine = create_async_engine(
-        settings.DATABASE_URL,
-        echo=False,
-        pool_pre_ping=True,
-        future=True,
+        settings.DATABASE_URL, echo=False, pool_pre_ping=True, future=True, poolclass=pool_class
     )
     _session_factory = async_sessionmaker(
         bind=_engine,

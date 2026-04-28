@@ -33,6 +33,7 @@ dev = [
     "ruff (>=0.15.7,<0.16.0)",
     "pytest (>=8.4.2,<9.0.0)",
     "pytest-asyncio (>=1.3.0,<2.0.0)",
+    "httpx (>=0.28.1,<0.29.0)",
 ]
 
 [tool.ruff]
@@ -42,3 +43,6 @@ exclude = ["alembic/"]
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 
+ [tool.pytest.ini_options]
+  markers = ["unit: unit test with fake dependencies", "integration: integration test with real dependencies"]
+  asyncio_mode = "strict"

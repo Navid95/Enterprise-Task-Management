@@ -13,4 +13,4 @@ def get_authentication_service(request: Request):
 def current_user(
     request: Request, credentials: HTTPAuthorizationCredentials = Depends(bearer)
 ) -> UUID:
-    return request.app.container.get_token_service().verify(credentials.credentials)
+    return request.app.container.get_token_service().verify_token(credentials.credentials)

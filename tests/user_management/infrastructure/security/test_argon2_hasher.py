@@ -3,6 +3,8 @@ import pytest
 from src.app.user_management.domain.value_objects.user_info import HashedPassword
 from src.app.user_management.infrastructure.security.argon2_hasher import Argon2PasswordHasher
 
+pytestmark = [pytest.mark.integration]
+
 
 @pytest.fixture()
 def hasher() -> Argon2PasswordHasher:

@@ -24,6 +24,3 @@ class Settings(BaseSettings):
         env_file_required=False,
         extra="ignore",
     )
-
-
-settings = Settings()

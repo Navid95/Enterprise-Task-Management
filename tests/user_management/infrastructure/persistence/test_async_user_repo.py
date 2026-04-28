@@ -17,6 +17,8 @@ from tests.conftest import (
     _DEFAULT_USER_MOBILE,
 )
 
+pytestmark = [pytest.mark.integration]
+
 
 @pytest.mark.asyncio
 async def test_save_success(user_repo):

@@ -6,6 +6,7 @@ from src.app.user_management.application.exceptions.auth import AuthenticationEr
 from src.app.user_management.application.ports.auth_token_service import IAuthTokenService
 from src.app.user_management.infrastructure.auth.jwt_token_service import JWTTokenService
 
+pytestmark = [pytest.mark.integration]
 _TEST_UUID: UUID = uuid4()
 
 

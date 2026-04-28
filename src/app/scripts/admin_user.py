@@ -1,7 +1,7 @@
 import logging
 
 from src.app.container import Container
-from src.app.core.settings import settings
+from src.app.core.settings import Settings
 from src.app.infrastructure.persistence.db.session import close_engine, init_engine
 from src.app.user_management.application.commands.create_user_command import CreateUserCommand
 from src.app.user_management.domain.exceptions import DuplicateUserInformation
@@ -10,8 +10,9 @@ logger = logging.getLogger(__name__)
 
 
 async def create_admin():
-    init_engine()
-    container = Container()
+    settings = Settings()
+    init_engine(settings)
+    container = Container(settings)
     try:
         await container.user_application_service.create_user(
             container.get_uow(),

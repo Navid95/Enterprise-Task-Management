@@ -12,6 +12,8 @@ from tests.conftest import (
     _DEFAULT_USER_MOBILE,
 )
 
+pytestmark = [pytest.mark.unit]
+
 
 @pytest.mark.asyncio
 async def test_create_user(create_user_uc, user_repo):
