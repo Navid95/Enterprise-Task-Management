@@ -1,7 +1,7 @@
 from typing import Optional
 from uuid import UUID
 
-from fastapi import Depends, Request, HTTPException
+from fastapi import Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.security.utils import get_authorization_scheme_param
 from starlette.status import HTTP_401_UNAUTHORIZED
