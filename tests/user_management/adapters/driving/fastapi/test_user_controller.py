@@ -55,7 +55,7 @@ def test_create_user_duplicate(client: TestClient, token):
 def test_create_user_not_auth(client: TestClient):
     response: Response = client.post("/users/")
 
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 def test_create_user_wrong_auth(client: TestClient):
